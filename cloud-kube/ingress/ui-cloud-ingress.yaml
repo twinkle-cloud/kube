@@ -12,7 +12,7 @@ spec:
   - host: cloud.twinkle.net
     http:
       paths:
-      - path: /twinkle/api
+      - path: /twinkle/api(/|$)(.*)
         backend:
           serviceName: gateway
           servicePort: 10000
