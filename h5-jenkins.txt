@@ -1,0 +1,59 @@
+### jenkins
+npm --prefix www run deploy --test
+npm --prefix www run build
+
+### Dockerfile
+FROM hub.docker.gemii.cc:7443/python/nginx-mini:1.12
+
+RUN mkdir /code
+ADD www/build /code
+ADD docker /code
+WORKDIR /code
+RUN touch -c /code/index.html
+
+CMD ./run.sh
+
+### nginx.conf
+worker_processes  auto;
+user root;
+daemon off;
+events {
+    use epoll;
+    worker_connections  8000;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    access_log  /dev/stdout;
+    sendfile        on;
+    keepalive_timeout  65;
+    #gzip  on;
+    server {
+        listen       8000;
+        server_name  localhost;
+
+        location / {
+            root   /code/;
+            try_files $uri /index.html;
+            index  index.html index.htm;
+       }
+
+
+
+    }
+}
+
+## run.sh
+#!/bin/sh
+cp nginx.conf /etc/nginx/
+nginx
+
+
+## Dockerfile
+FROM frolvlad/alpine-python3
+RUN apk update && \
+    apk add tzdata git nginx nodejs-npm bash && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone
+    mkdir /run/nginx/
+CMD "nginx" "-g" "daemon off;"
