@@ -10,7 +10,7 @@ spec:
   ports:
   - name: server-port
     port: 10001
-    targetPort: 10001
+    targetPort: 8000
     nodePort: 30075
   selector:
     app.kubernetes.io/name: authorization
