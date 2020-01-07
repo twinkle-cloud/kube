@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: ui-cloud
+    app.kubernetes.io/part-of: twinkle-ui
+  name: ui-cloud
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    app: ui-cloud
+  template:
+    metadata:
+      name: ui-cloud
+      labels:
+        app.kubernetes.io/name: ui-cloud
+        app.kubernetes.io/part-of: twinkle-ui
+    spec:
+      containers:
+      - name: ui-cloud
+        image: hub.docker.gemii.cc:7443/lizcloud/ui-cloud:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: server-port
+          containerPort: 8000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+        - name: APP_ID
+          value: ui-cloud
+        - name: APP_PORT
+          value: '8000'
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - twinkle-sidecar
+              - start
+          preStop:
+            exec:
+              command:
+              - twinkle-sidecar
+              - stop
+      imagePullSecrets:
+      - name: twinkle-sec

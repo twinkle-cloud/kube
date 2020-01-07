@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  creationTimestamp: null
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --name=etcd3
+    - --initial-advertise-peer-urls=http://192.168.12.173:2380
+    - --listen-peer-urls=http://127.0.0.1:2380,http://192.168.12.173:2380
+    - --advertise-client-urls=http://192.168.12.173:4001
+    - --listen-client-urls=http://127.0.0.1:4001,http://192.168.12.173:4001
+    - --data-dir=/var/lib/etcd
+    - --discovery=http://192.168.11.31:2379/v2/keys/discovery/8b7f5f2d-e5e7-42ad-8653-36bf36e15de8
+#    - --discovery=https://discovery.etcd.io/df8d6408e0117b8ed97e6fd7df151d33
+    image: gcr.io/google_containers/etcd-amd64:3.0.17
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 4001
+        scheme: HTTP
+      initialDelaySeconds: 15
+      timeoutSeconds: 15
+    name: etcd
+    resources: {}
+    ports:
+    - containerPort: 2380
+      hostPort: 2380
+      name: serverport
+    - containerPort: 4001
+      hostPort: 4001
+      name: clientport
+    volumeMounts:
+    - mountPath: /etc/ssl/certs
+      name: certs
+    - mountPath: /var/lib/etcd
+      name: etcd
+    - mountPath: /etc/kubernetes
+      name: k8s
+      readOnly: true
+  hostNetwork: true
+  securityContext:
+    seLinuxOptions:
+      type: spc_t
+  volumes:
+  - hostPath:
+      path: /etc/ssl/certs
+    name: certs
+  - hostPath:
+      path: /var/lib/etcd
+    name: etcd
+  - hostPath:
+      path: /etc/kubernetes
+    name: k8s
+status: {}

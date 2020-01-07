@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: authorization
+    app.kubernetes.io/part-of: twinklecloud
+  name: authorization
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: authorization
+      app.kubernetes.io/part-of: twinklecloud
+  template:
+    metadata:
+      name: authorization
+      labels:
+        app.kubernetes.io/name: authorization
+        app.kubernetes.io/part-of: twinklecloud
+    spec:
+      containers:
+      - name: authorization
+        image: hub.twinkle.net:8443/twinklecloud/twinkle-authorization:latest
+        imagePullPolicy: Always
+        ports:
+        - name: server-port
+          containerPort: 8000
+        env:
+        - name: RABBIT_MQ_HOST
+          value: 172.16.112.91
+        - name: RABBIT_MQ_USERNAME
+          value: admin
+        - name: RABBIT_MQ_PASSWORD
+          value: 1qaz!QAZ
+        - name: REDIS_HOST
+          value: 172.16.112.95
+        - name: REDIS_PASSWORD
+          value: 1qaz!QAZ
+        - name: DATASOURCE_DBTYPE
+          value: postgresql
+        - name: DATASOURCE_HOST
+          value: 172.16.112.95
+        - name: DATASOURCE_PORT
+          value: "25432"
+        - name: DATASOURCE_USERNAME
+          value: admin
+        - name: DATASOURCE_PASSWORD
+          value: abcd1234
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+        - name: JAVA_OPTS
+          value: -Xmx2G -Xms2G -XX:-UseGCOverheadLimit  
+      imagePullSecrets:
+      - name: twinkle-sec

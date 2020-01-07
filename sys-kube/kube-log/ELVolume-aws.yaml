@@ -1,0 +1,17 @@
+#  annotations:
+#    volume.beta.kubernetes.io/storage-class: "slow"
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: elpv01
+  labels:
+    type: amazonEBS
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore:
+    volumeID: vol-0a4c1c1b560704367
+    fsType: ext4
+    

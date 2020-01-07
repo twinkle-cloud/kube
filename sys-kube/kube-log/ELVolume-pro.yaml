@@ -1,0 +1,16 @@
+#  annotations:
+#    volume.beta.kubernetes.io/storage-class: "slow"
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: elpv01
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  nfs:
+    path: /data/es_data
+    server: 192.168.12.173
+    

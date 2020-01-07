@@ -1,0 +1,29 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: kube-dashboard
+  namespace: twinkle
+subsets:
+  - addresses: 
+      - ip: 192.168.6.5
+      - ip: 192.168.6.222
+      - ip: 192.168.10.204
+    ports:
+      - port: 30070
+        protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kube-dashboard
+  namespace: twinkle
+spec:
+#  type: ExternalName
+#  externalName: kubernetes-dashboard.kube-system.svc.cluster.local
+  ports:
+#    - protocol: TCP
+#      port: 443                      
+    - protocol: TCP   
+      port: 9443     
+      targetPort: 30070

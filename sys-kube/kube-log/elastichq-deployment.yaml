@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: elastichq
+  namespace: kube-system
+  labels:
+    app: elastichq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: elastichq
+      labels:
+        app: elastichq
+    spec:
+      containers:
+      - name: elastichq
+        image: hub.docker.gemii.cc:7443/google_containers/elastichq:5.0.0
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: kube-sec

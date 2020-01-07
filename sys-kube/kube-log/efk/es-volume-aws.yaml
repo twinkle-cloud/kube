@@ -1,0 +1,12 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efk-storage
+  annotations:
+    iam.amazonaws.com/role: k8s-aws-ec2-role
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+  zones: cn-north-1a
+  fsType: ext4
+  volumeID: vol-0b3939285878a0c7b

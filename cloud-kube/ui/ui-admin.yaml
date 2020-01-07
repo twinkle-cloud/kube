@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: ui-admin
+    app.kubernetes.io/part-of: twinkle-ui
+  name: ui-admin
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    app: ui-admin
+  template:
+    metadata:
+      name: ui-admin
+      labels:
+        app.kubernetes.io/name: ui-admin
+        app.kubernetes.io/part-of: twinkle-ui
+    spec:
+      containers:
+      - name: ui-admin
+        image: hub.docker.gemii.cc:7443/lizcloud/ui-admin:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: server-port
+          containerPort: 8000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+        - name: APP_ID
+          value: ui-admin
+        - name: APP_PORT
+          value: '8000'
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - twinkle-sidecar
+              - start
+          preStop:
+            exec:
+              command:
+              - twinkle-sidecar
+              - stop
+      imagePullSecrets:
+      - name: twinkle-sec

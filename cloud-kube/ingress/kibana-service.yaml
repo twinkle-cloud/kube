@@ -1,0 +1,22 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: kibana
+  namespace: twinkle
+subsets:
+  - addresses:
+      - ip: 10.107.233.69
+    ports:
+      - port: 5601
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana
+  namespace: twinkle
+spec:
+  ports:
+    - protocol: TCP
+      port: 15601
+      targetPort: 5601

@@ -1,0 +1,21 @@
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: consul-ingress
+  annotations:
+   # ingress.kubernetes.io/app-root: /eureka
+#    ingress.kubernetes.io/rewrite-target: /eureka
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  namespace: twinkle
+spec:
+  rules:
+  - host: consul.twinkle.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: clouddiscovery
+          servicePort: 80
+

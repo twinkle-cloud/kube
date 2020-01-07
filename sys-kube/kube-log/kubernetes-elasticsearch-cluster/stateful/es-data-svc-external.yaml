@@ -1,0 +1,32 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: elasticsearch-data
+  namespace: kube-system
+subsets:
+  - addresses: 
+      - ip: 192.168.11.131
+      - ip: 192.168.4.75
+      - ip: 192.168.6.238
+    ports:
+      - port: 9300
+        protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch-data
+  namespace: kube-system
+  labels:
+    component: elasticsearch
+    role: data
+spec:
+  ports:
+  - port: 9300
+    name: transport
+  clusterIP: None
+#  selector:
+#    component: elasticsearch
+#    role: data

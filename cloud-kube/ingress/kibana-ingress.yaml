@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  namespace: twinkle
+spec:
+  rules:
+  - host: kibana.twinkle.net
+    http:
+      paths:
+#      - path: /kibana/dashboard
+#        backend:
+#          serviceName: kibana
+#          servicePort: 15601
+#      - path: /kibana
+#        backend:
+#          serviceName: kibana
+#          servicePort: 15601
+#      - path: /app/kibana
+#        backend:
+#          serviceName: kibana
+#          servicePort: 15601
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: 15601

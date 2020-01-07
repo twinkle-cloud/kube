@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: ui-dashboard
+    app.kubernetes.io/part-of: twinkle-ui
+  name: ui-dashboard
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ui-dashboard
+      app.kubernetes.io/part-of: twinkle-ui
+  template:
+    metadata:
+      name: ui-dashboard
+      labels:
+        app.kubernetes.io/name: ui-dashboard
+        app.kubernetes.io/part-of: twinkle-ui
+    spec:
+      containers:
+      - name: ui-dashboard
+        image: hub.twinkle.net:8443/twinkle/ui-dashboard:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: server-port
+          containerPort: 8000
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+        - name: APP_ID
+          value: ui-dashboard
+        - name: APP_PORT
+          value: '8000'
+      imagePullSecrets:
+      - name: twinkle-sec

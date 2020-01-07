@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ui-cloud-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  namespace: twinkle
+spec:
+  rules:
+  - host: cloud.twinkle.net
+    http:
+      paths:
+      - path: /twinkle/api
+        backend:
+          serviceName: gateway
+          servicePort: 10000
+#      - path: /twinkle/fs
+#        backend:
+#          serviceName: gridfs
+#          servicePort: 9041
+#      - path: /
+#        backend:
+#          serviceName: ui-cloud
+#          servicePort: 8000

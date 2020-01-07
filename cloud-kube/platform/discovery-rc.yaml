@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: discovery
+    app.kubernetes.io/part-of: twinklecloud
+  name: discoveryrc
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: discovery
+      app.kubernetes.io/part-of: twinklecloud
+  template:
+    metadata:
+      name: discoveryrc
+      labels:
+        app.kubernetes.io/name: discovery
+        app.kubernetes.io/part-of: twinklecloud
+    spec:
+      containers:
+      - name: discoveryrc
+        image: hub.twinkle.net:8443/twinklecloud/twinkle-discovery:latest
+        ports:
+        - name: server-port
+          containerPort: 8761
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+      imagePullSecrets:
+      - name: twinkle-sec

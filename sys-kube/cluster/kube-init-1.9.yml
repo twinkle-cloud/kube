@@ -1,0 +1,19 @@
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+kubernetesVersion: v1.9.0
+networking:
+  podSubnet: 10.244.0.0/16
+apiServerCertSANs:
+- master1
+- master2
+- master3
+- 192.168.0.126
+- 192.168.0.115
+- 192.168.0.120
+- 192.168.0.254
+- 192.168.0.137
+etcd:
+  endpoints:
+  - http://192.168.0.126:2379
+  - http://192.168.0.115:2379
+  - http://192.168.0.120:2379

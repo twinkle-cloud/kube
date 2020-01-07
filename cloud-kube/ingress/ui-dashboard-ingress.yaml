@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ui-dashboard-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  namespace: twinkle
+spec:
+  rules:
+  - host: dashboard.twinkle.net
+#    port: 30443
+    http:
+#      port: 30443
+      paths:
+      - path: /admin
+        backend:
+          serviceName: ui-dashboard
+          servicePort: 8000
+      - path: /
+        backend:
+          serviceName: ui-dashboard
+          servicePort: 8000

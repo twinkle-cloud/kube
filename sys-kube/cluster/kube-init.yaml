@@ -1,0 +1,19 @@
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+kubernetesVersion: v1.7.4
+networking:
+  podSubnet: 10.244.0.0/16
+apiServerCertSANs:
+- master1
+- master2
+- master3
+- 192.168.6.5
+- 192.168.12.20
+- 192.168.10.204
+- 192.168.10.240
+- internal-liz-k8s-nelb-846295205.cn-north-1.elb.amazonaws.com.cn
+etcd:
+  endpoints:
+  - http://192.168.6.5:2379
+  - http://192.168.12.20:2379
+  - http://192.168.10.204:2379

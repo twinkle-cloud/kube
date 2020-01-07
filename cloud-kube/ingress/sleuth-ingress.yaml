@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sleuth-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /zipkin
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  namespace: twinkle
+spec:
+  rules:
+  - host: sleuth.twinkle.net
+    http:
+      paths:
+      - path: /zipkin/dashboard
+        backend:
+          serviceName: sleuth-server
+          servicePort: 10003
+      - path: /zipkin
+        backend:
+          serviceName: sleuth-server
+          servicePort: 10003
+
+

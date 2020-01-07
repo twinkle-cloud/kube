@@ -1,0 +1,35 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  namespace: kube-system
+  labels:
+    app: elasticsearch
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: elasticsearch
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - name: elasticsearch
+#        image: hub.docker.gemii.cc:7443/google_containers/elasticsearch:5.4.1
+        image: hub.docker.gemii.cc:7443/google_containers/elasticsearch-open-authority:5.4.1
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        env:
+        - name: ES_JAVA_OPTS
+          value: "-Xms4g -Xmx4g"
+        volumeMounts:
+        - name: es-volume
+          mountPath: /usr/share/elasticsearch/data
+      volumes:
+      - name: es-volume
+        persistentVolumeClaim:
+          claimName: efk-claim
+      imagePullSecrets:
+        - name: kube-sec

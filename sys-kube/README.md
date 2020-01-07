@@ -1,0 +1,1 @@
+This folder is used to place the Kubernetes Yaml files for the MSs.

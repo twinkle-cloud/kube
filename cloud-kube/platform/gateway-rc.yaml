@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: twinklecloud
+  name: gateway
+  namespace: twinkle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+      app.kubernetes.io/part-of: twinklecloud
+  template:
+    metadata:
+      name: gateway
+      labels:
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/part-of: twinklecloud
+    spec:
+      containers:
+      - name: gateway
+        image: hub.twinkle.net:8443/twinklecloud/twinkle-gateway:latest
+        imagePullPolicy: Always
+        ports:
+        - name: server-port
+          containerPort: 10000
+        env:
+        - name: RABBIT_MQ_HOST
+          value: 172.16.112.91
+        - name: RABBIT_MQ_USERNAME
+          value: admin
+        - name: RABBIT_MQ_PASSWORD
+          value: 1qaz!QAZ
+        - name: REDIS_HOST
+          value: 172.16.112.95
+        - name: REDIS_PASSWORD
+          value: 1qaz!QAZ
+        - name: SPRING_PROFILES_ACTIVE
+          value: cloud
+        - name: JAVA_OPTS
+          value: -Xmx2G -Xms2G -XX:-UseGCOverheadLimit  
+      imagePullSecrets:
+      - name: twinkle-sec

@@ -1,0 +1,77 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fluentd-server-config-v0.1.4
+  namespace: kube-system
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+data:
+  system.conf: |-
+    <system>
+      root_dir /tmp/fluentd-buffers/
+    </system>
+
+  system.input.conf: |-
+    # Listen to incoming data over SSL
+    <source>
+      @type forward
+      port 24224
+      bind 0.0.0.0
+    </source>
+
+  output.conf: |-
+    # Enriches records with Kubernetes metadata
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+    </filter>
+    # Store Data in Elasticsearch and S3
+    <match *.**>
+      @type copy
+      <store>
+        @id elasticsearch
+        @type elasticsearch
+        @log_level info
+        host elasticsearch
+        port 9200
+        #include_tag_key true
+        #tag_key @log_name
+        logstash_format true
+        request_timeout    30s
+        slow_flush_log_threshold 30s
+        <buffer>
+          @type file
+          path /var/log/fluentd-buffers/server.buffer
+          flush_mode interval
+          #retry_type exponential_backoff
+          flush_thread_count 12
+          flush_interval 8s
+          retry_max_interval 30
+          chunk_limit_size 32M
+          #queue_limit_length 64 #8
+          total_limit_size 20G
+          retry_wait 10s
+        </buffer>
+      </store>
+      <store>
+        @id s3
+        @type s3
+        @log_level info
+        #include_tag_key true
+        aws_key_id AKIAP4V52GZIQB4NRZ3A
+        aws_sec_key xOMtxfiKdeWyOal7wB/i64P2U9+mgbV37k/Fr1aT
+        s3_bucket logs.lizcloud.gemii.cc
+        s3_region cn-north-1
+        s3_object_key_format "%{path}dt=%{time_slice}_%{index}.%{file_extension}"
+        #store_as json
+        path hive/    
+        time_slice_format %Y%m%d/%Y%m%d%H
+        <buffer>
+          @type file
+          path /var/log/fluentd-buffers/s3.buffer
+          timekey 3600 # 1 hour partition
+          timekey_wait 10m
+          timekey_use_utc true # use utc
+          chunk_limit_size 256m
+        </buffer>
+      </store>
+    </match>

@@ -1,0 +1,56 @@
+{
+  "clusters": [
+    {
+      "nodes": [
+        {
+          "node": {
+            "hostnames": {
+              "manage": [
+                "minion18"
+              ],
+              "storage": [
+                "192.168.3.247"
+              ]
+            },
+            "zone": 1
+          },
+          "devices": [
+            "/dev/xvdf"
+          ]
+        },
+        {
+          "node": {
+            "hostnames": {
+              "manage": [
+                "minion19"
+              ],
+              "storage": [
+                "192.168.10.77"
+              ]
+            },
+            "zone": 1
+          },
+          "devices": [
+            "/dev/xvdf"
+          ]
+        },
+        {
+          "node": {
+            "hostnames": {
+              "manage": [
+                "minion20"
+              ],
+              "storage": [
+                "192.168.3.226"
+              ]
+            },
+            "zone": 1
+          },
+          "devices": [
+            "/dev/xvdf"
+          ]
+        }
+      ]
+    }
+  ]
+}
