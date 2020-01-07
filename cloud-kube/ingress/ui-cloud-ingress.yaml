@@ -16,6 +16,10 @@ spec:
         backend:
           serviceName: gateway
           servicePort: 10000
+      - path: /
+        backend:
+          serviceName: gateway
+          servicePort: 10000
 #      - path: /twinkle/fs
 #        backend:
 #          serviceName: gridfs
